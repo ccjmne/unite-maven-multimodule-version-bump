@@ -1,0 +1,16 @@
+{
+  "name": "multimodule-pipeline",
+  "version": "1.0.0",
+  "main": "pipeline.ts",
+  "module": "node",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0"
+  },
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^20.14.8"
+  }
+}
