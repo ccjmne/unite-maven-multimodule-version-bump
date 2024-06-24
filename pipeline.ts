@@ -1,11 +1,13 @@
 #! /usr/bin/env tsx
+
 import 'colors';
+import { existsSync } from 'fs';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 import maven from './mvn.js';
 
 function mvn(at: string, quiet?: boolean) {
-  return maven.create({ quiet, cwd: join(process.cwd(), dir) })
+  return maven.create({ quiet, cwd: join(process.cwd(), at) })
 }
 
 const [module, release, qualifier] = process.argv.slice(2)
@@ -20,7 +22,7 @@ if (!newVersion || !/^\S+:(?<artifact>\S+$)/.test(module.trim()) || (release ===
   console.error(`
 ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
-Usage: ${`[node] ${process.argv[1]} <groupId:artifactId> <release> [qualifier]`.white}
+Usage: ${`[node] ${'pipeline.ts' ?? process.argv[1]} <groupId:artifactId> <release> [qualifier]`.white}
 Where:
   - ${'module'.white} is an valid ${'maven module'.green} that must exist in a directory whose name matches the artifactId
   - ${'release'.white} can be one of: ${['major','minor','patch'].map(s => s.green).join(', ')}, or ${'branch'.green}.
@@ -32,76 +34,39 @@ Where:
 const dir = module.substring(module.indexOf(':') + 1);
 
 (async function() {
-  const { stdout: prev } = mvn(dir, true).execute("help:evaluate", {
-    expression: "project.version",
-    forceStdout: true,
-  });
+  const { stdout: prev } = await mvn(dir, true).execute(
+    // mvn help:evaluate --quiet --define forceStdout --define expression=project.version
+    'help:evaluate',
+    { expression: 'project.version', forceStdout: true }
+  );
 
-  console.log(`Updating version ${prev.green} to the next ${releaseType.green} release...`)
+  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} release...`)
 
-  const { stdout: next } = mvn(dir).execute(
+  const { stdout: next } = await mvn(dir).execute(
+    // mvn build-helper:parse-version versions:set versions:commit --define newVersion=${newVersion}
     ['build-helper:parse-version', 'versions:set', 'versions:commit'],
     { newVersion }
-  ).then(() => mvn(dir, true).execute("help:evaluate", {
-    expression: "project.version",
-    forceStdout: true,
-  }))
+  ).then(() => mvn(dir, true).execute(
+    // mvn help:evaluate --quiet --define forceStdout --define expression=project.version
+    'help:evaluate',
+    { expression: 'project.version', forceStdout: true })
+  )
 
-  console.log(`Updated version ${prev.green} to ${next.green}`)
-  ;
+  console.log(`Updated ${module.green} from version ${prev.white} to ${next.green}.`)
+  console.log(`Updating dependencies that used to point to ${module.green} version ${prev.green}...`)
 
   const subs = await readdir('.', { withFileTypes: true })
-  console.log(subs.filter(d => d.isDirectory()));
-  Promise.all(subs.filter(d => d.isDirectory()).map(({name: other}) => mvn(other, true).execute(['versions:use-dep-version'], {
-    depVersion: next,
-    includes: `${module}:::${prev}`,
-  }))).then(() => console.log('Yippee!!'))
+
+  Promise.all(subs.filter(({ name }) => existsSync(join('.', name, 'pom.xml'))).map(({ name: other }) => mvn(other).execute(
+    // mvn versions:use-dep-version --define forceVersion=true --define depVersion=${next} --define includes=${module}:::${prev}
+    ['versions:use-dep-version', 'versions:commit'],
+    {
+      depVersion: next,
+      forceVersion: true, // skip validation
+      includes: `${module}:::${prev}`,
+    }).then(({ stdout }) => console.log(stdout.includes(`Updated ${module}`)
+      ? `Updated ${module.white} from version ${next.white} to version ${next.green} in ${other.green}.`
+      : `No dependency on ${module.white} at version ${prev.white} in ${other.white}.`
+    ))
+  )).then(() => console.log('All done!'.green))
 })();
-
-
-// mvnq
-//   .execute("help:evaluate", {
-//     expression: "project.version",
-//     forceStdout: true,
-//   })
-//   .then(async function ({ stdout: cur }) {
-//     console.log(`Updating version ${cur.green} to the next ${releaseType.green} release...`)
-//     mvn.execute(
-//       ['build-helper:parse-version', 'versions:set', 'versions:commit'],
-//       { newVersion }
-//     ).then(() => mvnq.execute("help:evaluate", {
-//       expression: "project.version",
-//       forceStdout: true,
-//     }))
-//     .then(({ stdout: next }) => next)
-
-//     conso
-//   })
-  
-
-// mvn
-//   .execute(
-//     ['build-helper:parse-version', 'versions:set', 'versions:commit'],
-//     { newVersion: newVersion }
-//   )
-//   .then(() => mvnq.execute("help:evaluate", {
-//     expression: "project.version",
-//     forceStdout: true,
-//   }).then(({ stdout: version }) => version))
-//   .then(version => {
-//     console.log(`Updated to version: ${version}`);
-//   })
-//   .catch(() => process.exit(1))
-
-// ;(async function () {
-//   const updated = ;
-
-
-//   mvn.execute(['versions:use-dep-version'], {
-//     depVersion: '0.5.8',
-//     includes: 'io.codearte.jfairy:jfairy:::${version}',
-//   });
-//   // .then(() => mvn.execute(
-//   //  'versions:set'
-//   //  { newVersion: '1.0.3
-// })();
