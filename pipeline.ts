@@ -65,7 +65,7 @@ const dir = module.substring(module.indexOf(':') + 1);
       forceVersion: true, // skip validation
       includes: `${module}:::${prev}`,
     }).then(({ stdout }) => console.log(stdout.includes(`Updated ${module}`)
-      ? `Updated ${module.white} from version ${next.white} to version ${next.green} in ${other.green}.`
+      ? `Updated ${module.white} from version ${prev.white} to version ${next.green} in ${other.green}.`
       : `No dependency on ${module.white} at version ${prev.white} in ${other.white}.`
     ))
   )).then(() => console.log('All done!'.green))
