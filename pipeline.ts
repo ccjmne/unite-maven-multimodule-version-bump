@@ -52,11 +52,12 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
   console.log(`Updating dependencies that used to point to ${module.green} version ${prev.green}...`)
 
   const dirs = await readdir(process.cwd(), { withFileTypes: true })
-  await Promise.all(dirs.filter(({ name }) => existsSync(join(process.cwd(), name, 'pom.xml'))).map(({ name: other }) => mvn(other).execute(
-    // mvn versions:use-dep-version --define forceVersion=true --define depVersion=${next} --define includes=${module}:::${prev}
-    ['versions:use-dep-version', 'versions:commit'],
-    { depVersion: next, forceVersion: true, includes: `${module}:::${prev}` }
-  ).then(({ stdout }) => console.log(stdout.includes(`Updated ${module}`)
+  await Promise.all(
+    dirs.filter(({ name }) => existsSync(join(process.cwd(), name, 'pom.xml'))).map(({ name: other }) => mvn(other).execute(
+      // mvn versions:use-dep-version --define forceVersion=true --define depVersion=${next} --define includes=${module}:::${prev}
+      ['versions:use-dep-version', 'versions:commit'],
+      { depVersion: next, forceVersion: true, includes: `${module}:::${prev}` }
+    ).then(({ stdout }) => console.log(stdout.includes(`Updated ${module}`)
       ? `Updated ${module.white} from version ${prev.white} to version ${next.green} in ${other.green}.`
       : `No dependency on ${module.white} at version ${prev.white} in ${other.white}.`
     ))
