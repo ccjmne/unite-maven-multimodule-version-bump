@@ -21,7 +21,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     Usage: ${`[node] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
     Where:
       - ${'module'.white} is an valid ${'maven module'.green} that must exist in a directory whose name matches the artifactId
-      - ${'release'.white} can be one of: ${['major','minor','patch'].map(s => s.green).join(', ')}, or ${'branch'.green}.
+      - ${'release'.white} can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, or ${'branch'.green}.
       - ${'qualifier'.white} is any valid ${'version qualifier'.green} (only for ${'branch'.white} releases)
     `.replace(/^ {4}/gm, '').replace(/^\n|\n$/g, '').grey
   )
