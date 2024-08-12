@@ -22,7 +22,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     Usage: ${`[node] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
 
     Where:
-      - ${'module'.white} is an valid ${'maven module'.green} that must exist in a directory whose name matches the artifactId
+      - ${'module'.white} is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
       - ${'release'.white} can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
       - ${'qualifier'.white} is any valid ${'version qualifier'.green} (only for ${'branch'.white} releases)
 
@@ -40,7 +40,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     { expression: 'project.version', forceStdout: true }
   )
 
-  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} release...`)
+  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} version...`)
 
   const { stdout: next } = await mvn(dir).execute(
     // mvn build-helper:parse-version versions:set versions:commit --define newVersion=${newVersion}
