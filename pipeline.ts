@@ -8,10 +8,11 @@ import maven from './mvn.js'
 
 const [module, release, qualifier] = process.argv.slice(2)
 const newVersion = {
-  major:  '${parsedVersion.nextMajorVersion}.0.0',
-  minor:  '${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0',
-  patch:  '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}',
-  branch: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-' + qualifier
+  major:   '${parsedVersion.nextMajorVersion}.0.0',
+  minor:   '${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0',
+  patch:   '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}',
+  branch:  '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-' + qualifier,
+  release: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
 }[release]
 
 if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualifier)) {
