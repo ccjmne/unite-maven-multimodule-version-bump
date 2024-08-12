@@ -22,8 +22,8 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     Usage: ${`[node] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
 
     Where:
-      - ${'module'.white} is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
-      - ${'release'.white} can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
+      - ${'module'.white}    is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
+      - ${'release'.white}   can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
       - ${'qualifier'.white} is any valid ${'version qualifier'.green} (only for ${'branch'.white} releases)
 
     Using the ${'release'.green} option simply drops the ${'qualifier'.white} and has no effect when the current version already had none.
