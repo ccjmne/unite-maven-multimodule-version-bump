@@ -28,7 +28,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
   process.exit(1)
 }
 
-;(async function() {
+(async function () {
   const dir = module.substring(module.indexOf(':') + 1)
   const { stdout: prev } = await mvn(dir, true).execute(
     // mvn help:evaluate --quiet --define forceStdout --define expression=project.version
