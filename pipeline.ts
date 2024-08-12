@@ -49,7 +49,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
   )
 
   console.log(`Updated ${module.green} from version ${prev.white} to ${next.green}.`)
-  console.log(`Updating dependencies that used to point to ${module.green} version ${prev.green}...`)
+  console.log(`Updating dependencies that used to point to ${module.green} version ${prev.white}...`)
 
   const dirs = await readdir(process.cwd(), { withFileTypes: true })
   await Promise.all(
