@@ -11,11 +11,11 @@ const newVersion = {
   major:   '${parsedVersion.nextMajorVersion}.0.0',
   minor:   '${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0',
   patch:   '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}',
-  branch:  '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-' + qualifier,
+  branch:  '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
   release: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
-}[release]
+}[release] + (qualifier ? `-${qualifier}` : '')
 
-if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualifier)) {
+if (!['major', 'minor', 'patch', 'branch', 'release'].includes(release) || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualifier) || (release === 'release' && !!qualifier)) {
   console.error(`
     ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
@@ -24,7 +24,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     Where:
       - ${'module'.white}    is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
       - ${'release'.white}   can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
-      - ${'qualifier'.white} is any valid ${'version qualifier'.green} (only for ${'branch'.white} releases)
+      - ${'qualifier'.white} is any valid ${'version qualifier'.green} (mandatory for ${'branch'.white} versions, illegal for ${'release'.white} versions)
 
     Using the ${'release'.green} option simply drops the ${'qualifier'.white} and has no effect when the current version already had none.
     `.replace(/^ {4}/gm, '').replace(/^\n|\n$/g, '').grey
@@ -40,7 +40,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
     { expression: 'project.version', forceStdout: true }
   )
 
-  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} version...`)
+  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} version${!!qualifier ? ` with ${qualifier.green} qualifier` : ''}...`)
 
   const { stdout: next } = await mvn(dir).execute(
     // mvn build-helper:parse-version versions:set versions:commit --define newVersion=${newVersion}
