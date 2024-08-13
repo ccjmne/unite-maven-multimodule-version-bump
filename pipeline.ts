@@ -6,27 +6,27 @@ import { readdir } from 'fs/promises'
 import { basename, join } from 'path'
 import maven from './mvn.js'
 
-const [module, release, qualifier] = process.argv.slice(2)
+const [module, bump, qualifier] = process.argv.slice(2)
 const newVersion = {
   major:   '${parsedVersion.nextMajorVersion}.0.0',
   minor:   '${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0',
   patch:   '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}',
   branch:  '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
   release: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
-}[release] + (qualifier ? `-${qualifier}` : '')
+}[bump] + (qualifier ? `-${qualifier}` : '')
 
-if (!['major', 'minor', 'patch', 'branch', 'release'].includes(release) || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualifier) || (release === 'release' && !!qualifier)) {
+if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\S+$/.test(module) || (bump === 'branch' && !qualifier) || (bump === 'release' && !!qualifier)) {
   console.error(`
     ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
-    Usage: ${`[tsx] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
+    Usage: ${`[tsx] ${basename(process.argv[1])} <groupId:artifactId> <bump> [qualifier]`.white}
 
     Where:
       - ${'module'.white}    is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
-      - ${'release'.white}   can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
-      - ${'qualifier'.white} is any valid ${'version qualifier'.green} (mandatory for ${'branch'.white} versions, illegal for ${'release'.white} versions)
+      - ${'bump'.white}      can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
+      - ${'qualifier'.white} is any valid ${'version qualifier'.green} (mandatory for ${'branch'.white} bumps, illegal for ${'release'.white} bumps)
 
-    Using the ${'release'.green} option simply drops the ${'qualifier'.white} and has no effect when the current version already had none.
+    Using the ${'release'.green} bump simply drops the ${'qualifier'.white} and has no effect when the current version already had none.
     `.replace(/^ {4}/gm, '').replace(/^\n|\n$/g, '').grey
   )
   process.exit(1)
