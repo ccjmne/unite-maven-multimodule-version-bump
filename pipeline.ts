@@ -19,7 +19,7 @@ if (!newVersion || !/^\S+:\S+$/.test(module) || (release === 'branch' && !qualif
   console.error(`
     ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
-    Usage: ${`[node] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
+    Usage: ${`[tsx] ${basename(process.argv[1])} <groupId:artifactId> <release> [qualifier]`.white}
 
     Where:
       - ${'module'.white}    is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
