@@ -22,9 +22,9 @@ if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\
     Usage: ${`[tsx] ${basename(process.argv[1])} <groupId:artifactId> <bump> [qualifier]`.white}
 
     Where:
-      - ${'module'.white}    is a valid ${'maven module'.green} that must exist in a directory whose name matches the module's ${'artifactId'.white}
-      - ${'bump'.white}      can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
-      - ${'qualifier'.white} is any valid ${'version qualifier'.green} (mandatory for ${'branch'.white} bumps, illegal for ${'release'.white} bumps)
+      - ${'groupId:artifactId'.white} is a valid ${'maven module'.green} that must exist in a directory whose name matches ${'artifactId'.white}
+      - ${'bump'.white}               can be one of: ${'major'.green}, ${'minor'.green}, ${'patch'.green}, ${'branch'.green}, or ${'release'.green}.
+      - ${'qualifier'.white}          is any valid ${'version qualifier'.green} (mandatory for ${'branch'.white} bumps, illegal for ${'release'.white} bumps)
 
     Using the ${'release'.green} bump simply drops the ${'qualifier'.white} and has no effect when the current version already had none.
     `.replace(/^ {4}/gm, '').replace(/^\n|\n$/g, '').grey
