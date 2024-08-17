@@ -40,7 +40,7 @@ if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\
     { expression: 'project.version', forceStdout: true }
   )
 
-  console.log(`Updating ${module.green} from version ${prev.white} to the next ${release.green} version${!!qualifier ? ` with ${qualifier.green} qualifier` : ''}...`)
+  console.log(`Updating ${module.green} from version ${prev.white} to the next ${bump.green} version${!!qualifier ? ` with ${qualifier.green} qualifier` : ''}...`)
 
   const { stdout: next } = await mvn(dir).execute(
     // mvn build-helper:parse-version versions:set versions:commit --define newVersion=${newVersion}
