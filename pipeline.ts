@@ -6,7 +6,8 @@ import { readdir } from 'fs/promises'
 import { basename, join } from 'path'
 import maven from './mvn.js'
 
-const [module, bump, qualifier] = process.argv.slice(2)
+const updateDependents = !process.argv.slice(2).some(isNodeps)
+const [module, bump, qualifier] = process.argv.slice(2).filter(opt => !isNodeps(opt))
 const newVersion = {
   major:   '${parsedVersion.nextMajorVersion}.0.0',
   minor:   '${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0',
@@ -53,6 +54,9 @@ if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\
   )
 
   console.log(`Updated ${module.green} from version ${prev.white} to ${next.green}.`)
+
+  if (!updateDependents) { return }
+
   console.log(`Updating dependencies that used to point to ${module.green} version ${prev.white}...`)
 
   const modules = (await readdir(process.cwd(), { withFileTypes: true })).map(({ name }) => name)
@@ -74,4 +78,8 @@ if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\
 
 function mvn(workdir: string, quiet?: boolean) {
   return maven.create({ quiet, cwd: join(process.cwd(), workdir) })
+}
+
+function isNodeps(opt: string): boolean {
+  return /^-n|--nod|--no-update-dependents$/i.test(opt)
 }
