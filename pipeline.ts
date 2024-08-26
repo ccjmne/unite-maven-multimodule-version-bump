@@ -16,7 +16,7 @@ const newVersion = {
   release: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
 }[bump] + (qualifier ? `-${qualifier}` : '')
 
-if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\S+$/.test(module) || (bump === 'branch' && !qualifier) || (bump === 'release' && !!qualifier)) {
+if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\S+$/.test(module) || bump === (!!qualifier ? 'release' : 'branch')) {
   console.error(`
     ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
@@ -62,6 +62,7 @@ if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\
   const modules = (await readdir(process.cwd(), { withFileTypes: true })).map(({ name }) => name)
     .filter(name => existsSync(join(process.cwd(), name, 'pom.xml')))
   const maxlen = modules.reduce((m, { length }) => Math.max(m, length), 0)
+
   await Promise.all(
     modules.map(other => mvn(other).execute(
       // mvn versions:use-dep-version --define forceVersion=true --define depVersion=${next} --define includes=${module}:::${prev}
