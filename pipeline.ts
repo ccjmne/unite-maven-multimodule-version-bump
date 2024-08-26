@@ -16,7 +16,7 @@ const newVersion = {
   release: '${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}',
 }[bump] + (qualifier ? `-${qualifier}` : '')
 
-if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^\S+:\S+$/.test(module) || bump === (!!qualifier ? 'release' : 'branch')) {
+if (!['major', 'minor', 'patch', 'branch', 'release'].includes(bump) || !/^[a-z._-]+:[a-z._-]+$/.test(module) || bump === (!!qualifier ? 'release' : 'branch')) {
   console.error(`
     ${`Invalid arguments: ${process.argv.slice(2).join(' ').white}`.red}
 
