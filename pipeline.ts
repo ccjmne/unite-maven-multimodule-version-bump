@@ -82,5 +82,5 @@ function mvn(workdir: string, quiet?: boolean) {
 }
 
 function isNodeps(opt: string): boolean {
-  return /^-n|--nod|--no-update-dependents$/i.test(opt)
+  return /^-n|--nodeps|--no-update-dependents$/i.test(opt)
 }
