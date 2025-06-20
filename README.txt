@@ -1,9 +1,9 @@
-Revisions: 1                Maven Multirepo Pipeline                Éric NICOLAS
-Latest: 2024-08-17
+Revisions: 2            Maven Multi-Module Version Bump             Éric NICOLAS
+Latest: 2025-06-20
 
-1. Usage =======================================================================
+1. Usage -----------------------------------------------------------------------
 
-    Usage: [tsx] pipeline.ts <groupId:artifactId> <bump> [qualifier] [--nodeps]
+    Usage: [tsx] bump.ts <groupId:artifactId> <bump> [qualifier] [--nodeps]
 
     Where:
 
@@ -34,20 +34,19 @@ Latest: 2024-08-17
         choose to go with `node-ts` or something of the same vein.  `Deno` won't
         do, since we're using Node libraries.
 
-        You may edit the shebang in `pipeline.ts` to use your interpreter of
-        choice and keep using it as if it were an executable directly, or
-        explicitly feed it (the same file) to it (your TypeScript interpreter of
-        choice).
+        You may edit the shebang in `bump.ts` to use your interpreter of choice
+        and keep using it as if it were an executable directly, or explicitly
+        feed it (the same file) to it (your TypeScript interpreter of choice).
 
-2. What it can do ==============================================================
+2. What it can do --------------------------------------------------------------
 
     It can't make coffee.  I will cover this section in greater detail at some
     point in the future (surely).
 
-3. Under the hood ==============================================================
+3. Under the hood --------------------------------------------------------------
 
     It just delegates to `mvn`, all of it, everything.  It's (immensely) slow,
     it's cumbersome, it presumes that—and will not work unless—you have `mvn`
     installed and available.
 
-vim: textwidth=80 expandtab shiftwidth=4 smarttab
+                                                          vim: tw=80 sw=4 et sta
