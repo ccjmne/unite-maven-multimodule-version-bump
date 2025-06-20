@@ -4,13 +4,13 @@
   "main": "bump.ts",
   "module": "node",
   "keywords": [],
-  "author": "",
+  "author": "Éric NICOLAS (ccjmne) <ccjmne@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0"
   },
-  "description": "",
+  "description": "Attempt at a sensible-ish synchronised Maven dependencies bump",
   "devDependencies": {
-    "@types/node": "^20.14.8"
+    "@types/node": "^24.0.3"
   }
 }
