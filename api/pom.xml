@@ -18,7 +18,7 @@
     <dependencies>
       <dependency>
         <groupId>com.example</groupId>
-        <artifactId>adyen</artifactId>
+        <artifactId>impl-a</artifactId>
         <version>1.0.0</version>
       </dependency>
     </dependencies>

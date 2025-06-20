@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>adyen</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <artifactId>impl-b</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>test</name>
 
